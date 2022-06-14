@@ -107,6 +107,7 @@ tml_blinken <- get_timeline("SecBlinken", n = 3200, type = "recent", token = twi
 tml_mccarthy <- get_timeline("GOPLeader", n = 3200, type = "recent", token = twitter_token)
 tml_McConnell <- get_timeline("LeaderMcConnell", n = 3200, type = "recent", token = twitter_token)
 tml_DeSantis <- get_timeline("GovRonDeSantis", n = 3200, type = "recent", token = twitter_token)
+tml_Cruz <- get_timeline("tedcruz", n = 3200, type = "recent", token = twitter_token)
 ```
 
 ```{r cache = TRUE}
@@ -127,12 +128,15 @@ tweet_desantis <- tml_DeSantis %>%
   mutate(person = "DeSantis") %>% select(c(91,5,3))
 tweet_mcconnell <- tml_McConnell %>%
   mutate(person = "McConnell") %>% select(c(91,5,3))
-tweet_rep <- bind_rows(tweet_mccarthy, tweet_desantis, tweet_mcconnell) %>% mutate(party = "공화당")
+tweet_cruz <- tml_Cruz %>%
+  mutate(person = "McConnell") %>% select(c(91,5,3))
+tweet_rep <- bind_rows(tweet_mccarthy, tweet_desantis, tweet_mcconnell, tweet_cruz) %>% mutate(party = "공화당")
 #정치인 트윗들 합치기
 tweet_politicians <- bind_rows(tweet_dems, tweet_rep) %>% mutate(timestamp = ymd_hms(created_at))
 # 2022년 이후 트윗들만 선정
 tweet_politicians_21 <- tweet_politicians %>% filter(timestamp >= as_date("2022-01-01"))
 ```
+
 
 ## 주요 정치인들의 트윗 단어 빈도와 상호 비교
 ```{r}
